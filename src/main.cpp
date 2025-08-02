@@ -1,8 +1,10 @@
 #include <iostream>
 
+#include "DESX/desx.hpp"
+
 using namespace std;
 
 int main(){
-  cout << "Hello world!\n";
+  cout << CDESX::LOGO() << "\n";
   return 0;
 };
