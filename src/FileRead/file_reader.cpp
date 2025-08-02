@@ -13,7 +13,7 @@ bool CFile::init(const std::string path) {
   std::ifstream in(path);
   in.seekg(0, std::ios::end);
   this->m_file_size = in.tellg();
-  
+  in.close();
   if (this->m_file_size < 0)
     return false;
 
