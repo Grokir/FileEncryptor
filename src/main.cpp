@@ -7,11 +7,15 @@
 
 using namespace std;
 
-void read_file  (DES& encr, ifstream& inf );
-void write_file (DES& encr, ofstream& outf);
+void read_block  (DES& encr, ifstream& inf );
+void write_block (DES& encr, ofstream& outf);
 
 int encryption  (DES& encr, int cnt_iter, ifstream& inf, ofstream& outf);
 int decryption  (DES& encr, int cnt_iter, ifstream& inf, ofstream& outf);
+
+uint calc_count_iteration(uint file_bitsize, uint block_bitsize);
+
+int GLB_cnt = 0;
 
 int main(){
 
@@ -35,7 +39,10 @@ int main(){
 
   cout  << "[!] File size " << file.get_size() << " bytes\n";
 
-  cnt_iter = file.get_bit_size() / encryptor.countPlainTextBits();
+  cnt_iter =  calc_count_iteration(
+                file.get_bit_size(), 
+                encryptor.countPlainTextBits()
+              );
 
   char cmd;
   cout << "[*] Enter what do: (e)ncrtyption or (d)ecryption?  ";
@@ -67,38 +74,53 @@ int main(){
 
 int encryption  (DES& encr, int cnt_iter, ifstream& inf, ofstream& outf){
   for(uint i = 0; i < cnt_iter; i++){
-    read_file(encr, inf);
+    read_block(encr, inf);
     if(encr.encrypt())
-      write_file(encr, outf);
-    else
-      return -1;
-  }
-  return 0;
-};
-int decryption  (DES& encr, int cnt_iter, ifstream& inf, ofstream& outf){
-  for(uint i = 0; i < cnt_iter; i++){
-    read_file(encr, inf);
-    if(encr.decrypt())
-      write_file(encr, outf);
+      write_block(encr, outf);
     else
       return -1;
   }
   return 0;
 };
 
-void read_file  (DES& encr, ifstream& inf ){
+int decryption  (DES& encr, int cnt_iter, ifstream& inf, ofstream& outf){
+  for(uint i = 0; i < cnt_iter; i++){
+    read_block(encr, inf);
+    if(encr.decrypt())
+      write_block(encr, outf);
+    else
+      return -1;
+  }
+  return 0;
+};
+
+
+
+void read_block  (DES& encr, ifstream& inf ){
   string str;
   char buff;
 
   for(int i = 0; i < encr.countPlainTextSymbols(); ++i){
     inf.get(buff);
-    str += buff;
-  }
 
+    if(!inf.eof())
+      str += buff;
+  }
+  
   encr.setMSG(str);
+  str.clear();
 };
 
-void write_file (DES& encr, ofstream& outf){
+void write_block (DES& encr, ofstream& outf){
   outf.write(encr.getMSG().c_str(), encr.countPlainTextSymbols());
+};
+
+uint calc_count_iteration(uint file_bitsize, uint block_bitsize){
+  uint cnt_iter = file_bitsize / block_bitsize;
+
+  if(file_bitsize % block_bitsize != 0)
+    ++cnt_iter;
+
+  return cnt_iter;
 };
 
