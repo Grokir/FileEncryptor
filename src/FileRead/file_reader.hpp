@@ -1,8 +1,13 @@
-#include <cstdint>
-#include <string>
+#pragma once
 
 #ifndef FILE_READER
   #define FILE_READER
+
+  #include <cstdint>
+  #include <string>
+
+
+  #define BITLEN 8
 
   class CFile {
     private:
@@ -17,6 +22,12 @@
       
       const std::int32_t get_size()     const;
       const std::int64_t get_bit_size() const; 
+  };
+
+  namespace fr{
+
+    std::string byte_to_bin(char byte);
+    char        bin_to_byte(const std::string& binstr);
   };
 
 #endif

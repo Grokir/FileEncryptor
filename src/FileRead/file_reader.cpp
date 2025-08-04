@@ -1,7 +1,7 @@
 #include "file_reader.hpp"
 
 #include <fstream>
-
+#include <bitset>
 
 CFile::CFile() = default;
 
@@ -27,4 +27,16 @@ const std::int32_t CFile::get_size() const {
 
 const std::int64_t CFile::get_bit_size() const {
   return (this->m_file_size * 8);
+};
+
+
+//**************************************************
+
+
+std::string fr::byte_to_bin(char byte){
+  return std::bitset<BITLEN>(byte).to_string();
+};
+
+char fr::bin_to_byte(const std::string& binstr){
+  return (char) std::bitset<BITLEN>(binstr.c_str()).to_ulong();
 };
