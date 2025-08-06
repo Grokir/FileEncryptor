@@ -5,5 +5,5 @@ Currently supported  algorithms:
 - [DESX](https://en.wikipedia.org/wiki/DES-X)
 > Check reference in my [repo](https://github.com/Grokir/DES_and_DESX_algorithms).
 
-In Future:
+In the future:
 - AES 128, 192 and 256.
