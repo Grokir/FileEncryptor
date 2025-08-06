@@ -7,3 +7,4 @@ Currently supported  algorithms:
 
 In the future:
 - AES 128, 192 and 256.
+- Multifiles encrypt
