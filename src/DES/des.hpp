@@ -47,8 +47,8 @@ class DES {
     const uint  countPlainTextSymbols() const;
     const uint  countKeyBits()          const;
     const uint  countKeySymbols()       const;
-          bool  encrypt();
-          bool  decrypt();
+    bool        encrypt();
+    bool        decrypt();
   
   private:
     void clear_bin_str(std::vector<uint>& v);
