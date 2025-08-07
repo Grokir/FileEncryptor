@@ -38,6 +38,11 @@
 
       bool        encrypt();
       bool        decrypt();
+
+    private:
+      void clear_bin_str(std::vector<uint>& v);
+      uint char_to_binint ( char ch );
+      char binint_to_char ( int  i  );
   }; 
 
 #endif
