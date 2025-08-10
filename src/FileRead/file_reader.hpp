@@ -36,7 +36,6 @@
     char                bin_to_byte   (const std::string& binstr);
 
     std::vector<CFile>  get_file_list (const std::string path);
-    std::vector<CFile>  get_file_list (const std::string path);
   };
 
 #endif
