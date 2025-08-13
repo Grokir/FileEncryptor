@@ -74,9 +74,9 @@ int main(int argc, char** argv) {
     int arg_f_pos     =  get_pos_elem(args, "-d");
     int arg_file_pos  =  get_pos_elem(args, "--dir");
     
-    string dir = args[max(arg_f_pos, arg_file_pos) + 1];
+    path = args[max(arg_f_pos, arg_file_pos) + 1];
     
-    files = fr::get_file_list(dir);
+    files = fr::get_file_list(path);
 
     if(files.empty()){
       cout << "[!] Error read directory\n";
