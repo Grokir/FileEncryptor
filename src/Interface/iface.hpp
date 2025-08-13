@@ -2,10 +2,9 @@
 
 #include <fstream>
 
-#include "../DES/des.hpp"
-#include "../DESX/desx.hpp"
 #include "../FileRead/file_reader.hpp"
 
+using uint = unsigned int;
 
 enum Operation{
   ENCR, /// encryption
