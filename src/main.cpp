@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "Interface/iface.hpp"
+#include "FileRead/file_reader.hpp"
 
 using namespace std;
 
@@ -23,9 +24,10 @@ string help(){
   };
 
 int main(int argc, char** argv) {  
-  vector<string> args(argc);
-  Operation oper;
-  vector<CFile> files;
+  vector<string>  args(argc);
+  vector<CFile>   files;
+  Operation       oper;
+  string          path;
 
   for(int i = 0; i < argc; i++)
     args[i] = string(argv[i]);
@@ -45,7 +47,8 @@ int main(int argc, char** argv) {
       std::count(args.begin(), args.end(), "--encrypt")
   )
     oper = Operation::ENCR;
-  else if(
+  
+  if(
       std::count(args.begin(), args.end(), "-D") ||
       std::count(args.begin(), args.end(), "--decrypt")
   )
@@ -59,7 +62,7 @@ int main(int argc, char** argv) {
     int arg_f_pos = get_pos_elem(args, "-f");
     int arg_file_pos = get_pos_elem(args, "--file");
     
-    string path = args[max(arg_f_pos, arg_file_pos) + 1];
+    path = args[max(arg_f_pos, arg_file_pos) + 1];
     files.push_back(CFile(path));
   }
 
@@ -68,15 +71,20 @@ int main(int argc, char** argv) {
     std::count(args.begin(), args.end(), "-d") ||
     std::count(args.begin(), args.end(), "--dir")
   ){
-    int arg_f_pos = get_pos_elem(args, "-d");
-    int arg_file_pos = get_pos_elem(args, "--dir");
+    int arg_f_pos     =  get_pos_elem(args, "-d");
+    int arg_file_pos  =  get_pos_elem(args, "--dir");
     
     string dir = args[max(arg_f_pos, arg_file_pos) + 1];
     
     files = fr::get_file_list(dir);
+
+    if(files.empty()){
+      cout << "[!] Error read directory\n";
+      return -3;
+    }
   }
 
-
+  cout << "[+] Start wirk with '" << path << "'..." << endl;
 
   if(std::count(args.begin(), args.end(), "--des"))
     DES_ALG(files, oper);
@@ -88,7 +96,7 @@ int main(int argc, char** argv) {
          << "     --desx\n";
 
 
-  std::cout << "[+] Process: DONE" << std::endl;
+  std::cout << "\n[+] Process: DONE" << std::endl;
 
   return 0;
 };
