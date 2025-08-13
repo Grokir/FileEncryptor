@@ -17,9 +17,9 @@
     
     public:
       CFile();
-      CFile(const std::string path);
+      CFile(const std::string& path);
       
-      bool  init(const std::string path);
+      bool  init(const std::string& path);
       
       const std::int32_t get_size()     const;
       const std::int64_t get_bit_size() const; 
@@ -35,7 +35,8 @@
     std::string         byte_to_bin   (char byte);
     char                bin_to_byte   (const std::string& binstr);
 
-    std::vector<CFile>  get_file_list (const std::string path);
+    std::vector<CFile>  get_file_list (const std::string& path);
+    bool                rm_file_list  (const std::vector<CFile>& list);
   };
 
 #endif

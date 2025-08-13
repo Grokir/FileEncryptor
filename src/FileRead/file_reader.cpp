@@ -8,11 +8,11 @@
 
 CFile::CFile() = default;
 
-CFile::CFile(const std::string path) {
+CFile::CFile(const std::string& path) {
   this->init(path);
 };
 
-bool CFile::init(const std::string path) {
+bool CFile::init(const std::string& path) {
   std::ifstream in(path);
   in.seekg(0, std::ios::end);
   this->m_file_size = in.tellg();
@@ -48,13 +48,23 @@ char fr::bin_to_byte(const std::string& binstr){
   return (char) std::bitset<BITLEN>(binstr.c_str()).to_ulong();
 };
 
-std::vector<CFile> fr::get_file_list(const std::string path){
+std::vector<CFile> fr::get_file_list(const std::string& path){
   std::vector<CFile> res;
   namespace fs  = std::filesystem;
 
-  for (fs::recursive_directory_iterator i("."), end; i != end; ++i) 
+  for (fs::recursive_directory_iterator i(path), end; i != end; ++i) 
     if (!is_directory(i->path()))
       res.push_back(CFile(i->path()));
 
   return res;
+};
+
+bool fr::rm_file_list(const std::vector<CFile>& list){
+  namespace fs = std::filesystem;
+  for(const CFile& file : list)
+  
+    if(!fs::remove(file.get_path()))
+      return false;
+
+  return true;
 };
