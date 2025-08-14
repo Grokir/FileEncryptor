@@ -146,11 +146,16 @@ void DES_ALG (const std::vector<CFile>& files, Operation oper){
 
 void DESX_ALG(const std::vector<CFile>& files, Operation oper){
   DESX            encryptor;
-  std::string     key, key1, key2, file_name;
+  std::string     key, key1, key2, out_file_name;
   uint            cnt_iter; 
   std::ifstream   infile;
   std::ofstream   outfile;
   progressbar     pbar(files.size());
+
+  pbar.set_todo_char("");
+  pbar.set_done_char("");
+  pbar.set_opening_bracket_char("[*] Process: ");
+  pbar.set_closing_bracket_char("");
 
   std::cout  << "[*] Enter key  phrase (key should have length is 8 symbols): ";
   std::cin   >> key;
@@ -164,8 +169,19 @@ void DESX_ALG(const std::vector<CFile>& files, Operation oper){
   encryptor.setKEY2(key2);
 
   for(const CFile& file : files){
-    infile. open( file.get_path(), std::ios::binary );
-    outfile.open( file.get_path(), std::ios::binary );
+    switch (oper){
+      case Operation::ENCR:
+        out_file_name = file.get_path() + "e";
+        break;
+
+      case Operation::DECR:
+        out_file_name = file.get_path().substr(0, file.get_path().length()-1);
+        break;
+    }
+
+
+    infile. open( file.get_path(),  std::ios::binary );
+    outfile.open( out_file_name,    std::ios::binary );
 
     cnt_iter =  calc_count_iteration(
                   file.get_bit_size(), 
@@ -190,4 +206,5 @@ void DESX_ALG(const std::vector<CFile>& files, Operation oper){
     outfile.close();
   }
 
+  fr::rm_file_list(files);
 };
