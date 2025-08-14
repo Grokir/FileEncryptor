@@ -157,8 +157,8 @@ bool DESX::encrypt() {
   
   std::vector<uint> tmpkey = this->binkey;
 
-  std::vector<uint> L       ( size_of_block / 2 );
-  std::vector<uint> R       ( size_of_block / 2 );
+  std::vector<uint> L       ( this->size_of_block / 2 );
+  std::vector<uint> R       ( this->size_of_block / 2 );
 
   uint j = 0;
   
@@ -174,8 +174,8 @@ bool DESX::encrypt() {
       tmpkey = one_encrypt_round( tmpkey );
     
     /// копируем биты сообщения в L и в R
-    for(uint i = 0; i < size_of_block; i++){
-      if( i < size_of_block / 2 )
+    for(uint i = 0; i < this->size_of_block; i++){
+      if( i < this->size_of_block / 2 )
         L[i] = this->binmsg[i];
       else {
         R[j] = this->binmsg[i];
@@ -185,8 +185,8 @@ bool DESX::encrypt() {
     
     /// И производим 32-х битовый обмен
     j = 0;
-    for(uint i = 0; i < size_of_block; i++){
-      if( i < size_of_block / 2 )
+    for(uint i = 0; i < this->size_of_block; i++){
+      if( i < this->size_of_block / 2 )
         this->binmsg[i] = R[i];
       else {
         this->binmsg[i] = L[j];
@@ -207,8 +207,8 @@ bool DESX::encrypt() {
 
 bool DESX::decrypt() {
   std::vector<std::vector<uint>> tmpkey = preparing_keys( this->binkey );
-  std::vector<uint> L       ( size_of_block / 2 );
-  std::vector<uint> R       ( size_of_block / 2 );
+  std::vector<uint> L       ( this->size_of_block / 2 );
+  std::vector<uint> R       ( this->size_of_block / 2 );
 
   uint j = 0;
     
@@ -220,12 +220,12 @@ bool DESX::decrypt() {
     // производим 16 раундов расшифрования
     // с циклическим изъятием ключа из стека ключей
 
-    for(int i = round_count - 1; i >= 0; i--)
+    for(int i = this->round_count - 1; i >= 0; i--)
       one_decrypt_round( tmpkey[i] );    
     
     /// копируем биты сообщения в L и в R
-    for(uint i = 0; i < size_of_block; i++){
-      if( i < size_of_block / 2 )
+    for(uint i = 0; i < this->size_of_block; i++){
+      if( i < this->size_of_block / 2 )
         L[i] = this->binmsg[i];
       else {
         R[j] = this->binmsg[i];
@@ -235,8 +235,8 @@ bool DESX::decrypt() {
     
     /// И производим 32-х битовый обмен
     j = 0;
-    for(uint i = 0; i < size_of_block; i++){
-      if( i < size_of_block / 2 )
+    for(uint i = 0; i < this->size_of_block; i++){
+      if( i < this->size_of_block / 2 )
         this->binmsg[i] = R[i];
       else {
         this->binmsg[i] = L[j];
