@@ -21,7 +21,7 @@ string help(){
     -D, --decrypt                     Decryption
   )";
     // -k, --key  <path to key-file>     Selected key
-  };
+};
 
 int main(int argc, char** argv) {  
   vector<string>  args(argc);
@@ -34,8 +34,8 @@ int main(int argc, char** argv) {
 
 
   if( argc < 2 || 
-      std::count(args.begin(), args.end(), "-h") || 
-      std::count(args.begin(), args.end(), "--help")
+      std::find(args.begin(), args.end(), "-h")         !=  args.end() || 
+      std::find(args.begin(), args.end(), "--help")     !=  args.end() 
     ){
     cout << help() << endl;
     return 1;
@@ -43,24 +43,24 @@ int main(int argc, char** argv) {
 
 
   if(
-      std::count(args.begin(), args.end(), "-E") ||
-      std::count(args.begin(), args.end(), "--encrypt")
+      std::find(args.begin(), args.end(), "-E")         !=  args.end() ||
+      std::find(args.begin(), args.end(), "--encrypt")  !=  args.end() 
   )
     oper = Operation::ENCR;
   
   if(
-      std::count(args.begin(), args.end(), "-D") ||
-      std::count(args.begin(), args.end(), "--decrypt")
+      std::find(args.begin(), args.end(), "-D")         !=  args.end() ||
+      std::find(args.begin(), args.end(), "--decrypt")  !=  args.end() 
   )
     oper = Operation::DECR;
 
 
   if(
-    std::count(args.begin(), args.end(), "-f") ||
-    std::count(args.begin(), args.end(), "--file")
+    std::find(args.begin(), args.end(), "-f")           !=  args.end() ||
+    std::find(args.begin(), args.end(), "--file")       !=  args.end() 
   ){
-    int arg_f_pos = get_pos_elem(args, "-f");
-    int arg_file_pos = get_pos_elem(args, "--file");
+    int arg_f_pos     =   get_pos_elem(args, "-f");
+    int arg_file_pos  =   get_pos_elem(args, "--file");
     
     path = args[max(arg_f_pos, arg_file_pos) + 1];
     files.push_back(CFile(path));
@@ -68,8 +68,8 @@ int main(int argc, char** argv) {
 
   
   if(
-    std::count(args.begin(), args.end(), "-d") ||
-    std::count(args.begin(), args.end(), "--dir")
+    std::find(args.begin(), args.end(), "-d")           !=  args.end() ||
+    std::find(args.begin(), args.end(), "--dir")        !=  args.end() 
   ){
     int arg_f_pos     =  get_pos_elem(args, "-d");
     int arg_file_pos  =  get_pos_elem(args, "--dir");
@@ -86,9 +86,9 @@ int main(int argc, char** argv) {
 
   cout << "[+] Start wirk with '" << path << "'..." << endl;
 
-  if(std::count(args.begin(), args.end(), "--des"))
+  if(std::find(args.begin(), args.end(), "--des")       != args.end() )
     DES_ALG(files, oper);
-  else if(std::count(args.begin(), args.end(), "--desx"))
+  else if(std::find(args.begin(), args.end(), "--desx") !=  args.end() )
     DESX_ALG(files, oper);
   else
     cout << "[!] Error algs flag:\n" 
