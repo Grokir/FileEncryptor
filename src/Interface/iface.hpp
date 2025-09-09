@@ -22,6 +22,11 @@ int encryption  (ENCRYPTOR& encr, int cnt_iter, std::ifstream& inf, std::ofstrea
 template <typename ENCRYPTOR>
 int decryption  (ENCRYPTOR& encr, int cnt_iter, std::ifstream& inf, std::ofstream& outf);
 
+template <typename ENCRYPTOR>
+int rewrite_encrypt  (ENCRYPTOR& encr, int cnt_iter, std::fstream& filestream);
+template <typename ENCRYPTOR>
+int rewrite_decrypt  (ENCRYPTOR& encr, int cnt_iter, std::fstream& filestream);
+
 uint calc_count_iteration(uint file_bitsize, uint block_bitsize);
 int  get_pos_elem(const std::vector<std::string>& v,  const std::string& elem);
 int  get_pos_elem(const std::vector<CFile>& v,        const std::string& elem);

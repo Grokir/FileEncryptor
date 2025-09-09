@@ -35,6 +35,94 @@ int decryption  (ENCRYPTOR& encr, int cnt_iter, std::ifstream& inf, std::ofstrea
 
 
 template <typename ENCRYPTOR>
+int rewrite_encrypt  (ENCRYPTOR& encr, int cnt_iter, std::fstream& filestream){
+  int sz_block = encr.countPlainTextSymbols();
+  // std::vector<char> buf(sz_block);
+
+  char* buf = new char[sz_block];
+    
+  for(uint i = 0; i < cnt_iter; i++){
+    
+    // Установили курсор в начало блока
+    filestream.seekg(sz_block * i, std::ios::beg);
+    // filestream.seekp(encr.countPlainTextSymbols() * i, std::ios::beg);
+
+    // Читаем блок
+    filestream.read(buf, static_cast<std::streamsize>(sz_block));
+    std::size_t read = static_cast<std::size_t>(filestream.gcount());
+    if (read == 0)
+        return -1;           // файл пустой – ничего делать не нужно
+
+    // Выполнение операции
+    // for (std::size_t i = 0; i < read; ++i)
+    //     buf[i] ^= 0x2;
+
+    encr.setMSG(std::string(buf));
+    if(!encr.encrypt())
+      return -2;
+
+    // 3. Перемещаемся в начало блока
+    filestream.seekp(sz_block * i, std::ios::beg);
+    // filestream.seekp(encr.countPlainTextSymbols() * i, std::ios::beg);
+
+    // 4. Записываем изменённый блок
+    // filestream.write(encr.getMSG().c_str(), static_cast<std::streamsize>(read));
+    filestream.write(encr.getMSG().c_str(), sz_block);
+
+
+    // if(encr.decrypt())
+    //   write_block(encr, outf);
+    // else
+    //   return -1;
+  }
+  return 0;
+};
+
+template <typename ENCRYPTOR>
+int rewrite_decrypt  (ENCRYPTOR& encr, int cnt_iter, std::fstream& filestream){
+  int sz_block = encr.countPlainTextSymbols();
+  // std::vector<char> buf(sz_block);
+  // std::string buf;
+  char* buf = new char[sz_block];
+
+  for(uint i = 0; i < cnt_iter; i++){
+
+    filestream.seekg(sz_block * i, std::ios::beg);
+
+    // 1. Читаем блок
+    filestream.read(buf, static_cast<std::streamsize>(sz_block));
+    std::size_t read = static_cast<std::size_t>(filestream.gcount());
+    if (read == 0)
+        return -1;           // файл пустой – ничего делать не нужно
+
+    // 2. XOR
+    // for (std::size_t i = 0; i < read; ++i)
+    //     buf[i] ^= 0x2;
+
+    encr.setMSG(std::string(buf));
+    if(!encr.decrypt())
+      return -2;
+
+    // 3. Перемещаемся в начало файла
+    filestream.seekp(sz_block * i, std::ios::beg);
+    // filestream.seekp(encr.countPlainTextSymbols() * i, std::ios::beg);
+
+    // 4. Записываем изменённый блок
+    // filestream.write(encr.getMSG().c_str(), static_cast<std::streamsize>(read));
+    filestream.write(encr.getMSG().c_str(), sz_block);
+
+
+    // if(encr.decrypt())
+    //   write_block(encr, outf);
+    // else
+    //   return -1;
+  }
+  return 0;
+};
+
+
+
+template <typename ENCRYPTOR>
 void read_block  (ENCRYPTOR& encr, std::ifstream& inf ){
   std::string str;
   char buff;
@@ -88,6 +176,7 @@ void DES_ALG (const std::vector<CFile>& files, Operation oper){
   DES             encryptor;
   std::string     key, out_file_name;
   uint            cnt_iter; 
+  std::fstream    filestream;
   std::ifstream   infile;
   std::ofstream   outfile;
 
@@ -104,18 +193,20 @@ void DES_ALG (const std::vector<CFile>& files, Operation oper){
   encryptor.setKEY(key);
 
   for(const CFile& file : files){
-    switch (oper){
-      case Operation::ENCR:
-        out_file_name = file.get_path() + "e";
-        break;
+    // switch (oper){
+    //   case Operation::ENCR:
+    //     out_file_name = file.get_path() + "e";
+    //     break;
 
-      case Operation::DECR:
-        out_file_name = file.get_path().substr(0, file.get_path().length()-1);
-        break;
-    }
+    //   case Operation::DECR:
+    //     out_file_name = file.get_path().substr(0, file.get_path().length()-1);
+    //     break;
+    // }
 
-    infile. open( file.get_path(),  std::ios::binary );
-    outfile.open( out_file_name,    std::ios::binary );
+    filestream.open(file.get_path(),  std::ios::in | std::ios::out | std::ios::binary );
+
+    // infile. open( file.get_path(),  std::ios::binary );
+    // outfile.open( out_file_name,    std::ios::binary );
 
     cnt_iter =  calc_count_iteration(
                   file.get_bit_size(), 
@@ -124,23 +215,25 @@ void DES_ALG (const std::vector<CFile>& files, Operation oper){
 
     switch (oper){
       case Operation::ENCR:
-        if(encryption(encryptor, cnt_iter, infile, outfile) < 0)
+        // if(encryption(encryptor, cnt_iter, infile, outfile) < 0)
+        if(rewrite_encrypt(encryptor, cnt_iter, filestream) < 0)
           std::cout << "[!] Error encryption \n\n";
         break;
 
       case Operation::DECR:
-        if(decryption(encryptor, cnt_iter, infile, outfile) < 0)
+        // if(decryption(encryptor, cnt_iter, infile, outfile) < 0)
+        if(rewrite_decrypt(encryptor, cnt_iter, filestream) < 0)
           std::cout << "[!] Error decryption \n\n";
         break;
     }
-    
-    infile. close();
-    outfile.close();
+    filestream.close();
+    // infile. close();
+    // outfile.close();
 
-    pbar.update();
+    // pbar.update();
   }
   
-  fr::rm_file_list(files);
+  // fr::rm_file_list(files);
 };
 
 
