@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
   vector<string>  args(argc);
   vector<CFile>   files;
   Operation       oper;
-  string          path;
+  string          path, key;
 
   for(int i = 0; i < argc; i++)
     args[i] = string(argv[i]);
@@ -83,13 +83,14 @@ int main(int argc, char** argv) {
       return -3;
     }
   }
+  cout << "[*] Enter the key: "; cin >> key;
 
-  cout << "[+] Start wirk with '" << path << "'..." << endl;
+  cout << "[+] Start work with '" << path << "'..." << endl;
 
   if(std::find(args.begin(), args.end(), "--des")       != args.end() )
-    DES_ALG(files, oper);
+    DES_ALG(files, key, oper);
   else if(std::find(args.begin(), args.end(), "--desx") !=  args.end() )
-    DESX_ALG(files, oper);
+    DESX_ALG(files, key, oper);
   else
     cout << "[!] Error algs flag:\n" 
          << "     --des \n"   
