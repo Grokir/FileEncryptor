@@ -149,6 +149,10 @@ const uint DESX::countKeyBits() const {
   return size_of_key;
 };
 
+const uint DES::countKeySourceBits() const {
+  return size_of_src_key;
+};
+
 const uint DESX::countKeySymbols() const {
   return size_of_key / size_of_char;
 };

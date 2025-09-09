@@ -26,10 +26,11 @@ namespace CDESX {
 
 class DESX {
   private:
-    const uint        size_of_block = 64;   /// в битах
-    const uint        size_of_char  =  8;   /// в битах
-    const uint        size_of_key   = 56;   /// в битах
-    const uint        round_count   = 16;
+    const uint        size_of_block   = 64;   /// в битах
+    const uint        size_of_char    =  8;   /// в битах
+    const uint        size_of_key     = 56;   /// в битах
+    const uint        size_of_src_key = 64;   /// в битах
+    const uint        round_count     = 16;
 
     std::vector<uint> binkey;               /// длина ключа  56 бита
     std::vector<uint> binkey1;              /// длина ключа  64 бита
@@ -53,6 +54,7 @@ class DESX {
     const uint  countPlainTextBits   () const;
     const uint  countPlainTextSymbols() const;
     const uint  countKeyBits         () const;
+    const uint  countKeySourceBits   () const;
     const uint  countKeySymbols      () const;
     bool        encrypt              ();
     bool        decrypt              ();
