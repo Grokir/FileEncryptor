@@ -4,7 +4,6 @@
   
   #define AES_H
 
-
   #include <cstdint>
   #include <vector>
   #include <string>
@@ -13,7 +12,7 @@
     private:
       uint              size_of_block = 128;   /// в битах
       const uint        size_of_char  =   8;   /// в битах
-      uint              size_of_key   =  56;   /// в битах
+      uint              size_of_key   = 128;   /// в битах
       uint              round_count   =  10;
 
       std::vector<uint> binkey;               /// длина ключа  56 бита
