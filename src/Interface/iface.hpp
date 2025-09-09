@@ -31,5 +31,7 @@ uint calc_count_iteration(uint file_bitsize, uint block_bitsize);
 int  get_pos_elem(const std::vector<std::string>& v,  const std::string& elem);
 int  get_pos_elem(const std::vector<CFile>& v,        const std::string& elem);
 
-void DES_ALG (const std::vector<CFile>& files, Operation oper);
-void DESX_ALG(const std::vector<CFile>& files, Operation oper);
+std::vector<std::string> get_bin_keys(const std::string& key, uint bit_key_len);
+
+void DES_ALG (const std::vector<CFile>& files, const std::string& key, Operation oper);
+void DESX_ALG(const std::vector<CFile>& files, const std::string& key, Operation oper);

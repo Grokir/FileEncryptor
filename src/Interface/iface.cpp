@@ -3,10 +3,12 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <bitset>
 
 #include "../progressbar/progressbar.hpp"
 #include "../DES/des.hpp"
 #include "../DESX/desx.hpp"
+#include "../SHA-2/sha256.hpp"
 
 template <typename ENCRYPTOR>
 int encryption  (ENCRYPTOR& encr, int cnt_iter, std::ifstream& inf, std::ofstream& outf){
@@ -172,9 +174,29 @@ int get_pos_elem(const std::vector<std::string>& v, const std::string& elem){
 };
 
 
-void DES_ALG (const std::vector<CFile>& files, Operation oper){
+std::vector<std::string> get_bin_keys(const std::string& key, uint bit_key_len){
+  std::vector<std::string>  res;
+  std::string               tmp;
+
+  SHA256 hash(key);
+  for(uint32_t num : hash.hexdigest()){
+    tmp += std::bitset<32>(num).to_string();
+    if(tmp.length() == bit_key_len){
+      res.push_back(tmp);
+      tmp.clear();
+    }
+  }
+
+  if(!tmp.empty())
+    res.push_back(tmp);
+  
+  return res;
+};
+
+
+void DES_ALG (const std::vector<CFile>& files, const std::string& key, Operation oper){
   DES             encryptor;
-  std::string     key, out_file_name;
+  std::string     out_file_name;
   uint            cnt_iter; 
   std::fstream    filestream;
   std::ifstream   infile;
@@ -187,10 +209,13 @@ void DES_ALG (const std::vector<CFile>& files, Operation oper){
   pbar.set_opening_bracket_char("[*] Process: ");
   pbar.set_closing_bracket_char("");
 
-  std::cout  << "[*] Enter key phrase (key should have length is 8 symbols): ";
-  std::cin   >> key;
+  // std::cout  << "[*] Enter key phrase (key should have length is 8 symbols): ";
+  // std::cin   >> key;
+  // encryptor.setKEY(key);
 
-  encryptor.setKEY(key);
+  encryptor.setBinaryKEY(
+    get_bin_keys(key, encryptor.countPlainTextBits())[0]
+  );
 
   for(const CFile& file : files){
     // switch (oper){
@@ -237,29 +262,35 @@ void DES_ALG (const std::vector<CFile>& files, Operation oper){
 };
 
 
-void DESX_ALG(const std::vector<CFile>& files, Operation oper){
-  DESX            encryptor;
-  std::string     key, key1, key2, out_file_name;
-  uint            cnt_iter; 
-  std::ifstream   infile;
-  std::ofstream   outfile;
-  progressbar     pbar(files.size());
+void DESX_ALG(const std::vector<CFile>& files, const std::string& key, Operation oper){
+  DESX                      encryptor;
+  std::string               out_file_name;
+  uint                      cnt_iter; 
+  std::ifstream             infile;
+  std::ofstream             outfile;
+  progressbar               pbar(files.size());
+  std::vector<std::string>  binkeys = get_bin_keys(key, encryptor.countPlainTextBits());
 
   pbar.set_todo_char("");
   pbar.set_done_char("");
   pbar.set_opening_bracket_char("[*] Process: ");
   pbar.set_closing_bracket_char("");
 
-  std::cout  << "[*] Enter key  phrase (key should have length is 8 symbols): ";
-  std::cin   >> key;
-  std::cout  << "[*] Enter key1 phrase (key should have length is 8 symbols): ";
-  std::cin   >> key1;
-  std::cout  << "[*] Enter key2 phrase (key should have length is 8 symbols): ";
-  std::cin   >> key2;
+  // std::cout  << "[*] Enter key  phrase (key should have length is 8 symbols): ";
+  // std::cin   >> key;
+  // std::cout  << "[*] Enter key1 phrase (key should have length is 8 symbols): ";
+  // std::cin   >> key1;
+  // std::cout  << "[*] Enter key2 phrase (key should have length is 8 symbols): ";
+  // std::cin   >> key2;
 
-  encryptor.setKEY (key );
-  encryptor.setKEY1(key1);
-  encryptor.setKEY2(key2);
+  // encryptor.setKEY (key );
+  // encryptor.setKEY1(key1);
+  // encryptor.setKEY2(key2);
+
+  encryptor.setBinaryKEY (binkeys[0]);
+  encryptor.setBinaryKEY1(binkeys[1]);
+  encryptor.setBinaryKEY2(binkeys[2]);
+
 
   for(const CFile& file : files){
     switch (oper){
