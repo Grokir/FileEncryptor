@@ -6,6 +6,7 @@ Currently supported  algorithms:
 > Check reference in my [repo](https://github.com/Grokir/DES_and_DESX_algorithms).
 - Multifiles encrypt
 - [Progressbar](https://github.com/gipert/progressbar)
+- [SHA-2 Hashes](https://github.com/Grokir/CppLibHashes)
 
 
 In the future:
