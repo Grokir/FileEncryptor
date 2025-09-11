@@ -209,29 +209,25 @@ void DES_ALG (const std::vector<CFile>& files, const std::string& key, Operation
   pbar.set_opening_bracket_char("[*] Process: ");
   pbar.set_closing_bracket_char("");
 
-  // std::cout  << "[*] Enter key phrase (key should have length is 8 symbols): ";
-  // std::cin   >> key;
-  // encryptor.setKEY(key);
-
   encryptor.setBinaryKEY(
     get_bin_keys(key, encryptor.countPlainTextBits())[0]
   );
 
   for(const CFile& file : files){
-    // switch (oper){
-    //   case Operation::ENCR:
-    //     out_file_name = file.get_path() + "e";
-    //     break;
+    switch (oper){
+      case Operation::ENCR:
+        out_file_name = file.get_path() + "e";
+        break;
 
-    //   case Operation::DECR:
-    //     out_file_name = file.get_path().substr(0, file.get_path().length()-1);
-    //     break;
-    // }
+      case Operation::DECR:
+        out_file_name = file.get_path().substr(0, file.get_path().length()-1);
+        break;
+    }
 
-    filestream.open(file.get_path(),  std::ios::in | std::ios::out | std::ios::binary );
+    // filestream.open(file.get_path(),  std::ios::in | std::ios::out | std::ios::binary );
 
-    // infile. open( file.get_path(),  std::ios::binary );
-    // outfile.open( out_file_name,    std::ios::binary );
+    infile. open( file.get_path(),  std::ios::binary );
+    outfile.open( out_file_name,    std::ios::binary );
 
     cnt_iter =  calc_count_iteration(
                   file.get_bit_size(), 
@@ -240,25 +236,25 @@ void DES_ALG (const std::vector<CFile>& files, const std::string& key, Operation
 
     switch (oper){
       case Operation::ENCR:
-        // if(encryption(encryptor, cnt_iter, infile, outfile) < 0)
-        if(rewrite_encrypt(encryptor, cnt_iter, filestream) < 0)
+        if(encryption(encryptor, cnt_iter, infile, outfile) < 0)
+        // if(rewrite_encrypt(encryptor, cnt_iter, filestream) < 0)
           std::cout << "[!] Error encryption \n\n";
         break;
 
       case Operation::DECR:
-        // if(decryption(encryptor, cnt_iter, infile, outfile) < 0)
-        if(rewrite_decrypt(encryptor, cnt_iter, filestream) < 0)
+        if(decryption(encryptor, cnt_iter, infile, outfile) < 0)
+        // if(rewrite_decrypt(encryptor, cnt_iter, filestream) < 0)
           std::cout << "[!] Error decryption \n\n";
         break;
     }
-    filestream.close();
-    // infile. close();
-    // outfile.close();
+    // filestream.close();
+    infile. close();
+    outfile.close();
 
-    // pbar.update();
+    pbar.update();
   }
   
-  // fr::rm_file_list(files);
+  fr::rm_file_list(files);
 };
 
 
@@ -276,16 +272,6 @@ void DESX_ALG(const std::vector<CFile>& files, const std::string& key, Operation
   pbar.set_opening_bracket_char("[*] Process: ");
   pbar.set_closing_bracket_char("");
 
-  // std::cout  << "[*] Enter key  phrase (key should have length is 8 symbols): ";
-  // std::cin   >> key;
-  // std::cout  << "[*] Enter key1 phrase (key should have length is 8 symbols): ";
-  // std::cin   >> key1;
-  // std::cout  << "[*] Enter key2 phrase (key should have length is 8 symbols): ";
-  // std::cin   >> key2;
-
-  // encryptor.setKEY (key );
-  // encryptor.setKEY1(key1);
-  // encryptor.setKEY2(key2);
 
   encryptor.setBinaryKEY (binkeys[0]);
   encryptor.setBinaryKEY1(binkeys[1]);
