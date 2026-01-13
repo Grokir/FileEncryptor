@@ -1,4 +1,4 @@
-#include "sha512.hpp"
+#include "SHA-2/sha512.hpp"
 
 #include <sstream>
 #include <iomanip>

@@ -1,4 +1,4 @@
-#include "iface.hpp"
+#include "Interface/iface.hpp"
 
 #include <iostream>
 #include <algorithm>
@@ -6,9 +6,9 @@
 #include <bitset>
 
 #include "../progressbar/progressbar.hpp"
-#include "../DES/des.hpp"
-#include "../DESX/desx.hpp"
-#include "../SHA-2/sha256.hpp"
+#include "DES/des.hpp"
+#include "DESX/desx.hpp"
+#include "SHA-2/sha256.hpp"
 
 template <typename ENCRYPTOR>
 int encryption  (ENCRYPTOR& encr, int cnt_iter, std::ifstream& inf, std::ofstream& outf){
