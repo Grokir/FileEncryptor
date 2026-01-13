@@ -32,12 +32,12 @@ endif()
 
 # Добавим пути к исходникам
 set(SOURCES
-  source/SHA-2/sha256.cpp
-  source/SHA-2/sha512.cpp
-  source/FileRead/file_reader.cpp
-  source/Interface/iface.cpp
-  source/DES/des.cpp
-  source/DESX/desx.cpp
+  src/source/SHA-2/sha256.cpp
+  src/source/SHA-2/sha512.cpp
+  src/source/FileRead/file_reader.cpp
+  src/source/Interface/iface.cpp
+  src/source/DES/des.cpp
+  src/source/DESX/desx.cpp
 )
 
 # set(SHA2_SOURCES
@@ -68,12 +68,12 @@ set(SOURCES
 
 # Добавим заголовочные файлы для удобства (необязательно)
 set(HEADERS
-  include/SHA-2/sha256.hpp
-  include/SHA-2/sha512.hpp
-  include/FileRead/file_reader.hpp
-  include/Interface/iface.hpp
-  include/DES/des.hpp
-  include/DESX/desx.hpp
+  src/include/SHA-2/sha256.hpp
+  src/include/SHA-2/sha512.hpp
+  src/include/FileRead/file_reader.hpp
+  src/include/Interface/iface.hpp
+  src/include/DES/des.hpp
+  src/include/DESX/desx.hpp
 )
 
 # set(SHA2_HEADERS
