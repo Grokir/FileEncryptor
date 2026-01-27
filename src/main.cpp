@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
 
   if(std::find(args.begin(), args.end(), "--des")       != args.end() )
     DES_ALG(files, key, oper);
-  else if(std::find(args.begin(), args.end(), "--desx") !=  args.end() )
+  else if(std::find(args.begin(), args.end(), "--desx") != args.end() )
     DESX_ALG(files, key, oper);
   else
     cout << "[!] Error algs flag:\n" 

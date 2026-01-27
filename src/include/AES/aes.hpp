@@ -27,8 +27,8 @@
       std::string getMSG();
 
       void        setBinaryKEY(const std::string& binkey);
-      void        setBinaryMSG(const std::string& binmsg);
-      std::string getBinaryMSG();
+      // void        setBinaryMSG(const std::string& binmsg);
+      // std::string getBinaryMSG();
       
       const uint  countPlainTextBits()    const;
       const uint  countPlainTextSymbols() const;
