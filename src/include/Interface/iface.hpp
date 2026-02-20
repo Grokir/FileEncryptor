@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-#include "../FileRead/file_reader.hpp"
+#include "FileRead/file_reader.hpp"
 
 using uint = unsigned int;
 
@@ -33,5 +33,6 @@ int  get_pos_elem(const std::vector<CFile>& v,        const std::string& elem);
 
 std::vector<std::string> get_bin_keys(const std::string& key, uint bit_key_len);
 
+void AES_ALG (const std::vector<CFile>& files, const std::string& key, Operation oper);
 void DES_ALG (const std::vector<CFile>& files, const std::string& key, Operation oper);
 void DESX_ALG(const std::vector<CFile>& files, const std::string& key, Operation oper);

@@ -8,6 +8,7 @@
 #include "../progressbar/progressbar.hpp"
 #include "DES/des.hpp"
 #include "DESX/desx.hpp"
+#include "AES/aes.hpp"
 #include "SHA-2/sha256.hpp"
 
 template <typename ENCRYPTOR>
@@ -177,7 +178,7 @@ int get_pos_elem(const std::vector<std::string>& v, const std::string& elem){
 std::vector<std::string> get_bin_keys(const std::string& key, uint bit_key_len){
   std::vector<std::string>  res;
   std::string               tmp;
-
+ 
   SHA256 hash(key);
   for(uint32_t num : hash.hexdigest()){
     tmp += std::bitset<32>(num).to_string();
@@ -191,6 +192,77 @@ std::vector<std::string> get_bin_keys(const std::string& key, uint bit_key_len){
     res.push_back(tmp);
   
   return res;
+};
+
+
+void AES_ALG (const std::vector<CFile>& files, const std::string& key, Operation oper){
+  AES             encryptor;
+  std::string     out_file_name;
+  uint            cnt_iter; 
+  std::fstream    filestream;
+  std::ifstream   infile;
+  std::ofstream   outfile;
+
+  progressbar     pbar(files.size());
+
+  pbar.set_todo_char("");
+  pbar.set_done_char("");
+  pbar.set_opening_bracket_char("[*] Process: ");
+  pbar.set_closing_bracket_char("");
+
+  SHA256 hash(key);
+  uint key_len = encryptor.countKeySymbols();
+  std::vector<uint> hashkey;
+  for(uint byte : hash.hexdigest()){
+    hashkey.push_back(byte);
+    if(hashkey.size() == key_len)
+      break;
+  }
+  encryptor.setKEY(hashkey);
+
+
+  for(const CFile& file : files){
+    switch (oper){
+      case Operation::ENCR:
+        out_file_name = file.get_path() + "e";
+        break;
+
+      case Operation::DECR:
+        out_file_name = file.get_path().substr(0, file.get_path().length()-1);
+        break;
+    }
+
+    // filestream.open(file.get_path(),  std::ios::in | std::ios::out | std::ios::binary );
+
+    infile. open( file.get_path(),  std::ios::binary );
+    outfile.open( out_file_name,    std::ios::binary );
+
+    cnt_iter =  calc_count_iteration(
+                  file.get_bit_size(), 
+                  encryptor.countPlainTextBits()
+                );
+
+    switch (oper){
+      case Operation::ENCR:
+        if(encryption(encryptor, cnt_iter, infile, outfile) < 0)
+        // if(rewrite_encrypt(encryptor, cnt_iter, filestream) < 0)
+          std::cout << "[!] Error encryption \n\n";
+        break;
+
+      case Operation::DECR:
+        if(decryption(encryptor, cnt_iter, infile, outfile) < 0)
+        // if(rewrite_decrypt(encryptor, cnt_iter, filestream) < 0)
+          std::cout << "[!] Error decryption \n\n";
+        break;
+    }
+    // filestream.close();
+    infile. close();
+    outfile.close();
+
+    pbar.update();
+  }
+  
+  fr::rm_file_list(files);
 };
 
 

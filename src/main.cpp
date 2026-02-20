@@ -13,6 +13,7 @@ string help(){
   return 
   R"(
     -h, --help                        help message
+    --aes                             AES alg
     --des                             DES alg
     --desx                            DESX alg
     -f, --file <path to file>         Selected file for work
@@ -23,6 +24,15 @@ string help(){
     // -k, --key  <path to key-file>     Selected key
 };
 
+
+bool Test_AES(){
+  string key = "test_key";
+  
+};
+
+
+
+
 int main(int argc, char** argv) {  
   vector<string>  args(argc);
   vector<CFile>   files;
@@ -32,6 +42,7 @@ int main(int argc, char** argv) {
   for(int i = 0; i < argc; i++)
     args[i] = string(argv[i]);
 
+    
 
   if( argc < 2 || 
       std::find(args.begin(), args.end(), "-h")         !=  args.end() || 
@@ -87,12 +98,12 @@ int main(int argc, char** argv) {
 
   cout << "[+] Start work with '" << path << "'..." << endl;
 
-  if(std::find(args.begin(), args.end(), "--des")       != args.end() )
-    DES_ALG(files, key, oper);
-  else if(std::find(args.begin(), args.end(), "--desx") != args.end() )
-    DESX_ALG(files, key, oper);
+       if( std::find(args.begin(), args.end(), "--des" ) != args.end() ) DES_ALG (files, key, oper);
+  else if( std::find(args.begin(), args.end(), "--desx") != args.end() ) DESX_ALG(files, key, oper);
+  else if( std::find(args.begin(), args.end(), "--aes" ) != args.end() ) AES_ALG (files, key, oper);
   else
     cout << "[!] Error algs flag:\n" 
+         << "     --aes \n"
          << "     --des \n"   
          << "     --desx\n";
 

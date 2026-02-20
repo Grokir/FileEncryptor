@@ -32,6 +32,7 @@ set(SOURCES
   source/SHA-2/sha512.cpp
   source/FileRead/file_reader.cpp
   source/Interface/iface.cpp
+  source/AES/aes.cpp
   source/DES/des.cpp
   source/DESX/desx.cpp
 )
@@ -42,13 +43,14 @@ set(HEADERS
   include/SHA-2/sha512.hpp
   include/FileRead/file_reader.hpp
   include/Interface/iface.hpp
+  include/AES/aes.hpp
   include/DES/des.hpp
   include/DESX/desx.hpp
 )
 
 # Собираем исполняемый файл
 add_executable(filenc
-    main.cpp
+    test.cpp
     ${SOURCES}
     ${HEADERS}    
 )
