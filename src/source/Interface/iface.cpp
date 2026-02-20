@@ -5,7 +5,7 @@
 #include <string>
 #include <bitset>
 
-#include "../progressbar/progressbar.hpp"
+#include "Progressbar/progressbar.hpp"
 #include "DES/des.hpp"
 #include "DESX/desx.hpp"
 #include "AES/aes.hpp"
@@ -35,94 +35,6 @@ int decryption  (ENCRYPTOR& encr, int cnt_iter, std::ifstream& inf, std::ofstrea
   }
   return 0;
 };
-
-
-template <typename ENCRYPTOR>
-int rewrite_encrypt  (ENCRYPTOR& encr, int cnt_iter, std::fstream& filestream){
-  int sz_block = encr.countPlainTextSymbols();
-  // std::vector<char> buf(sz_block);
-
-  char* buf = new char[sz_block];
-    
-  for(uint i = 0; i < cnt_iter; i++){
-    
-    // Установили курсор в начало блока
-    filestream.seekg(sz_block * i, std::ios::beg);
-    // filestream.seekp(encr.countPlainTextSymbols() * i, std::ios::beg);
-
-    // Читаем блок
-    filestream.read(buf, static_cast<std::streamsize>(sz_block));
-    std::size_t read = static_cast<std::size_t>(filestream.gcount());
-    if (read == 0)
-        return -1;           // файл пустой – ничего делать не нужно
-
-    // Выполнение операции
-    // for (std::size_t i = 0; i < read; ++i)
-    //     buf[i] ^= 0x2;
-
-    encr.setMSG(std::string(buf));
-    if(!encr.encrypt())
-      return -2;
-
-    // 3. Перемещаемся в начало блока
-    filestream.seekp(sz_block * i, std::ios::beg);
-    // filestream.seekp(encr.countPlainTextSymbols() * i, std::ios::beg);
-
-    // 4. Записываем изменённый блок
-    // filestream.write(encr.getMSG().c_str(), static_cast<std::streamsize>(read));
-    filestream.write(encr.getMSG().c_str(), sz_block);
-
-
-    // if(encr.decrypt())
-    //   write_block(encr, outf);
-    // else
-    //   return -1;
-  }
-  return 0;
-};
-
-template <typename ENCRYPTOR>
-int rewrite_decrypt  (ENCRYPTOR& encr, int cnt_iter, std::fstream& filestream){
-  int sz_block = encr.countPlainTextSymbols();
-  // std::vector<char> buf(sz_block);
-  // std::string buf;
-  char* buf = new char[sz_block];
-
-  for(uint i = 0; i < cnt_iter; i++){
-
-    filestream.seekg(sz_block * i, std::ios::beg);
-
-    // 1. Читаем блок
-    filestream.read(buf, static_cast<std::streamsize>(sz_block));
-    std::size_t read = static_cast<std::size_t>(filestream.gcount());
-    if (read == 0)
-        return -1;           // файл пустой – ничего делать не нужно
-
-    // 2. XOR
-    // for (std::size_t i = 0; i < read; ++i)
-    //     buf[i] ^= 0x2;
-
-    encr.setMSG(std::string(buf));
-    if(!encr.decrypt())
-      return -2;
-
-    // 3. Перемещаемся в начало файла
-    filestream.seekp(sz_block * i, std::ios::beg);
-    // filestream.seekp(encr.countPlainTextSymbols() * i, std::ios::beg);
-
-    // 4. Записываем изменённый блок
-    // filestream.write(encr.getMSG().c_str(), static_cast<std::streamsize>(read));
-    filestream.write(encr.getMSG().c_str(), sz_block);
-
-
-    // if(encr.decrypt())
-    //   write_block(encr, outf);
-    // else
-    //   return -1;
-  }
-  return 0;
-};
-
 
 
 template <typename ENCRYPTOR>

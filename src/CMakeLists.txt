@@ -46,6 +46,7 @@ set(HEADERS
   include/AES/aes.hpp
   include/DES/des.hpp
   include/DESX/desx.hpp
+  include/Progressbar/progressbar.hpp
 )
 
 # Собираем исполняемый файл
