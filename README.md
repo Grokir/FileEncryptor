@@ -9,5 +9,6 @@ Currently supported  algorithms:
 - [SHA-2 Hashes](https://github.com/Grokir/CppLibHashes)
 
 
-In the future:
+In progress:
 - AES 128, 192 and 256.
+
