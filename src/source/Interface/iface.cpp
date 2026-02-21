@@ -92,8 +92,8 @@ std::vector<std::string> get_bin_keys(const std::string& key, uint bit_key_len){
   std::string               tmp;
  
   SHA256 hash(key);
-  for(uint32_t num : hash.hexdigest()){
-    tmp += std::bitset<32>(num).to_string();
+  for(uint8_t num : hash.hexdigest()){
+    tmp += std::bitset<8>(num).to_string();
     if(tmp.length() == bit_key_len){
       res.push_back(tmp);
       tmp.clear();
