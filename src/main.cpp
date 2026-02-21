@@ -21,7 +21,6 @@ string help(){
     -E, --encrypt                     Encryption
     -D, --decrypt                     Decryption
   )";
-    // -k, --key  <path to key-file>     Selected key
 };
 
 
@@ -31,10 +30,9 @@ int main(int argc, char** argv) {
   Operation       oper;
   string          path, key;
 
-  for(int i = 0; i < argc; i++)
+  for(int i = 0; i < argc; i++){
     args[i] = string(argv[i]);
-
-    
+  }
 
   if( argc < 2 || 
       std::find(args.begin(), args.end(), "-h")         !=  args.end() || 
@@ -44,19 +42,19 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-
   if(
       std::find(args.begin(), args.end(), "-E")         !=  args.end() ||
       std::find(args.begin(), args.end(), "--encrypt")  !=  args.end() 
-  )
+  ) {
     oper = Operation::ENCR;
+  }
   
   if(
       std::find(args.begin(), args.end(), "-D")         !=  args.end() ||
       std::find(args.begin(), args.end(), "--decrypt")  !=  args.end() 
-  )
+  ){
     oper = Operation::DECR;
-
+  }
 
   if(
     std::find(args.begin(), args.end(), "-f")           !=  args.end() ||
@@ -82,7 +80,7 @@ int main(int argc, char** argv) {
     files = fr::get_file_list(path);
 
     if(files.empty()){
-      cout << "[!] Error read directory\n";
+      cout << "[-] Error read directory\n";
       return -3;
     }
   }
@@ -94,7 +92,7 @@ int main(int argc, char** argv) {
   else if( std::find(args.begin(), args.end(), "--desx") != args.end() ) DESX_ALG(files, key, oper);
   else if( std::find(args.begin(), args.end(), "--aes" ) != args.end() ) AES_ALG (files, key, oper);
   else
-    cout << "[!] Error algs flag:\n" 
+    cout << "[-] Error algs flag:\n" 
          << "     --aes \n"
          << "     --des \n"   
          << "     --desx\n";

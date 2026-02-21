@@ -144,8 +144,6 @@ void AES_ALG (const std::vector<CFile>& files, const std::string& key, Operation
         break;
     }
 
-    // filestream.open(file.get_path(),  std::ios::in | std::ios::out | std::ios::binary );
-
     infile. open( file.get_path(),  std::ios::binary );
     outfile.open( out_file_name,    std::ios::binary );
 
@@ -157,17 +155,15 @@ void AES_ALG (const std::vector<CFile>& files, const std::string& key, Operation
     switch (oper){
       case Operation::ENCR:
         if(encryption(encryptor, cnt_iter, infile, outfile) < 0)
-        // if(rewrite_encrypt(encryptor, cnt_iter, filestream) < 0)
-          std::cout << "[!] Error encryption \n\n";
+          std::cout << "[-] Error encryption \n\n";
         break;
 
       case Operation::DECR:
         if(decryption(encryptor, cnt_iter, infile, outfile) < 0)
-        // if(rewrite_decrypt(encryptor, cnt_iter, filestream) < 0)
-          std::cout << "[!] Error decryption \n\n";
+          std::cout << "[-] Error decryption \n\n";
         break;
     }
-    // filestream.close();
+
     infile. close();
     outfile.close();
 
@@ -208,8 +204,6 @@ void DES_ALG (const std::vector<CFile>& files, const std::string& key, Operation
         break;
     }
 
-    // filestream.open(file.get_path(),  std::ios::in | std::ios::out | std::ios::binary );
-
     infile. open( file.get_path(),  std::ios::binary );
     outfile.open( out_file_name,    std::ios::binary );
 
@@ -221,17 +215,15 @@ void DES_ALG (const std::vector<CFile>& files, const std::string& key, Operation
     switch (oper){
       case Operation::ENCR:
         if(encryption(encryptor, cnt_iter, infile, outfile) < 0)
-        // if(rewrite_encrypt(encryptor, cnt_iter, filestream) < 0)
-          std::cout << "[!] Error encryption \n\n";
+          std::cout << "[-] Error encryption \n\n";
         break;
 
       case Operation::DECR:
         if(decryption(encryptor, cnt_iter, infile, outfile) < 0)
-        // if(rewrite_decrypt(encryptor, cnt_iter, filestream) < 0)
-          std::cout << "[!] Error decryption \n\n";
+          std::cout << "[-] Error decryption \n\n";
         break;
     }
-    // filestream.close();
+    
     infile. close();
     outfile.close();
 
@@ -285,12 +277,12 @@ void DESX_ALG(const std::vector<CFile>& files, const std::string& key, Operation
     switch (oper){
       case Operation::ENCR:
         if(encryption(encryptor, cnt_iter, infile, outfile) < 0)
-          std::cout << "[!] Error encryption \n\n";
+          std::cout << "[-] Error encryption \n\n";
         break;
 
       case Operation::DECR:
         if(decryption(encryptor, cnt_iter, infile, outfile) < 0)
-          std::cout << "[!] Error decryption \n\n";
+          std::cout << "[-] Error decryption \n\n";
         break;
     }
     
