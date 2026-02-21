@@ -25,14 +25,6 @@ string help(){
 };
 
 
-bool Test_AES(){
-  string key = "test_key";
-  
-};
-
-
-
-
 int main(int argc, char** argv) {  
   vector<string>  args(argc);
   vector<CFile>   files;

@@ -51,7 +51,7 @@ set(HEADERS
 
 # Собираем исполняемый файл
 add_executable(filenc
-    test.cpp
+    main.cpp
     ${SOURCES}
     ${HEADERS}    
 )
