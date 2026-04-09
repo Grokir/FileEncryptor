@@ -107,8 +107,8 @@ std::vector<std::string> get_bin_keys(const std::string& key, uint bit_key_len){
 };
 
 
-void AES_ALG (const std::vector<CFile>& files, const std::string& key, Operation oper){
-  AES             encryptor;
+void AES_ALG (const std::vector<CFile>& files, const std::string& key, Operation oper, const uint& aes_key_size){
+  AES             encryptor(aes_key_size);
   std::string     out_file_name;
   uint            cnt_iter; 
   std::fstream    filestream;

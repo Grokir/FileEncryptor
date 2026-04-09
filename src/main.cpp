@@ -13,7 +13,9 @@ string help(){
   return 
   R"(
     -h, --help                        help message
-    --aes                             AES alg
+    --aes128                          AES-128 alg
+    --aes192                          AES-192 alg
+    --aes256                          AES-256 alg
     --des                             DES alg
     --desx                            DESX alg
     -f, --file <path to file>         Selected file for work
@@ -88,14 +90,18 @@ int main(int argc, char** argv) {
 
   cout << "[+] Start work with '" << path << "'..." << endl;
 
-       if( std::find(args.begin(), args.end(), "--des" ) != args.end() ) DES_ALG (files, key, oper);
-  else if( std::find(args.begin(), args.end(), "--desx") != args.end() ) DESX_ALG(files, key, oper);
-  else if( std::find(args.begin(), args.end(), "--aes" ) != args.end() ) AES_ALG (files, key, oper);
+       if( std::find(args.begin(), args.end(), "--des"   ) != args.end() ) DES_ALG (files, key, oper);
+  else if( std::find(args.begin(), args.end(), "--desx"  ) != args.end() ) DESX_ALG(files, key, oper);
+  else if( std::find(args.begin(), args.end(), "--aes128") != args.end() ) AES_ALG (files, key, oper, 128);
+  else if( std::find(args.begin(), args.end(), "--aes192") != args.end() ) AES_ALG (files, key, oper, 192);
+  else if( std::find(args.begin(), args.end(), "--aes256") != args.end() ) AES_ALG (files, key, oper, 256);
   else
     cout << "[-] Error algs flag:\n" 
-         << "     --aes \n"
-         << "     --des \n"   
-         << "     --desx\n";
+         << "     --aes128\n"
+         << "     --aes192\n"
+         << "     --aes256\n"
+         << "     --des   \n"   
+         << "     --desx  \n";
 
 
   std::cout << "\n[+] Process: DONE" << std::endl;
