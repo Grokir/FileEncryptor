@@ -7,8 +7,4 @@ Currently supported  algorithms:
 - Multifiles encrypt
 - [Progressbar](https://github.com/gipert/progressbar)
 - [SHA-2 Hashes](https://github.com/Grokir/CppLibHashes)
-
-
-In progress:
-- AES 128, 192 and 256.
-
+- [AES 128/192/256](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard)
