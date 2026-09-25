@@ -165,7 +165,8 @@ std::vector<std::vector<uint>> KeyExpansion(const std::vector<uint>& key, uint N
       RotWord(temp);
       SubWord(temp);
       for(int j = 0; j < temp.size(); j++)
-      temp[j] ^= RCON_table[i/Nk + j];
+      // temp[j] ^= RCON_table[i/Nk + j];
+      temp[j] ^= RCON_table[4*(i/Nk - 1) + j];
     }
     else if (Nk > 6 && (i % Nk == 4)){
       SubWord(temp);
@@ -270,7 +271,8 @@ void AES::setMSG(const std::string& msg) {
   int k = 0;
   for(int i = 0; i < 4; i++){
       for(int j = 0; j < Nb; j++){
-        this->msg[i][j] = std::bitset<8>(msg[k]).to_ulong();
+        // this->msg[i][j] = std::bitset<8>(msg[k]).to_ulong();
+        this->msg[j][i] = std::bitset<8>(msg[k]).to_ulong();
         ++k;
         if (k >= msglen)
           return;
@@ -283,7 +285,8 @@ std::string AES::getMSG() {
   
   for(int i = 0; i < 4; i++){
     for(int j = 0; j < 4; j++){
-      res += static_cast<char>(this->msg[i][j]);
+      // res += static_cast<char>(this->msg[i][j]);
+      res += static_cast<char>(this->msg[j][i]);
     }
   }
   return res;
