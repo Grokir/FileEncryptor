@@ -244,11 +244,15 @@ AES::AES(const uint& bin_key_len){
   
   this->msg = std::vector<std::vector<uint>>(4, std::vector<uint>(this->Nb, 0));
 
-  if(this->size_of_key == 192)
+  if(this->size_of_key == 192){
     this->Nr = 12;
+    this->Nk = 6;
+  }
   
-  if(this->size_of_key == 256)
+  if(this->size_of_key == 256){
     this->Nr = 14;
+    this->Nk = 8;
+  }
 };
 
 void AES::setKEY(const std::vector<uint>& key) {
@@ -287,11 +291,11 @@ std::string AES::getMSG() {
 };
 
 const uint AES::countPlainTextBits() const {
-  return size_of_key;
+  return size_of_block;
 };
 
 const uint AES::countPlainTextSymbols() const {
-  return size_of_key / 8;
+  return size_of_block / 8;
 };
 
 const uint AES::countKeyBits() const {

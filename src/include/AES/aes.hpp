@@ -9,6 +9,7 @@
   class AES{
     private:
       uint              size_of_key   = 128;   /// в битах
+      uint              size_of_block = 128;   /// в битах
       uint              Nk            =   4;   
       uint              Nb            =   4;   
       uint              Nr            =  10;   
