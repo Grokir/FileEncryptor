@@ -32,11 +32,12 @@
   };
 
   namespace fr{
-    std::string         byte_to_bin   (char byte);
-    char                bin_to_byte   (const std::string& binstr);
+    std::string         byte_to_bin     (char byte);
+    char                bin_to_byte     (const std::string& binstr);
 
-    std::vector<CFile>  get_file_list (const std::string& path);
-    bool                rm_file_list  (const std::vector<CFile>& list);
+    std::vector<CFile>  get_file_list   (const std::string& path);
+    bool                rm_file_list    (const std::vector<CFile>& list);
+    bool                wipe_and_remove (const std::string& path, int passes=3);
   };
 
 #endif

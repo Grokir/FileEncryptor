@@ -3,6 +3,8 @@
 #include <fstream>
 #include <bitset>
 #include <filesystem>
+#include <random>
+#include <cstdint>
 
 #include <iostream>
 
@@ -60,11 +62,47 @@ std::vector<CFile> fr::get_file_list(const std::string& path){
 };
 
 bool fr::rm_file_list(const std::vector<CFile>& list){
-  namespace fs = std::filesystem;
+  // namespace fs = std::filesystem;
   for(const CFile& file : list)
-  
-    if(!fs::remove(file.get_path()))
+    // if(!fs::remove(file.get_path()))
+    if(!fr::wipe_and_remove(file.get_path(), 3))
       return false;
 
   return true;
 };
+
+bool fr::wipe_and_remove(const std::string& path, int passes) {
+  namespace fs = std::filesystem;
+  std::error_code ec;
+  auto size = fs::file_size(path, ec);
+  if (ec) return false;
+
+  std::random_device rd;
+  std::mt19937_64 gen(rd());
+  std::uniform_int_distribution<int> dist(0, 255);
+
+  std::fstream out(path, std::ios::binary | std::ios::in | std::ios::out);
+  if (!out.is_open()) return false;
+
+  std::vector<char> buf(4096);
+
+  for (int p = 0; p < passes; ++p) {
+    out.seekp(0, std::ios::beg);
+    std::uintmax_t written = 0;
+
+    while (written < size) {
+      std::size_t chunk = std::min<std::uintmax_t>(buf.size(), size - written);
+      for (std::size_t i = 0; i < chunk; ++i)
+        buf[i] = static_cast<char>(dist(gen));  // последний проход обычно делают нулями
+
+      out.write(buf.data(), chunk);
+      written += chunk;
+    }
+    out.flush();  // гарантирует, что данные дошли до ОС (но не обязательно до диска)
+  }
+  out.close();
+
+  // опционально: затереть метаданные, переименовав файл перед удалением
+  fs::remove(path, ec);
+  return !ec;
+}
